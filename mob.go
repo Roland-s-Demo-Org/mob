@@ -481,9 +481,13 @@ func injectCommandWithMessage(command string, message string) string {
 }
 
 func executeCommandsInBackgroundProcess(commands ...string) (err error) {
+	validCommand := regexp.MustCompile(`^[a-zA-Z0-9_\-\./ :\\'"=]+$`)
 	cmds := make([]string, 0)
 	for _, c := range commands {
 		if len(c) > 0 {
+			if !validCommand.MatchString(c) {
+				return fmt.Errorf("invalid input")
+			}
 			cmds = append(cmds, c)
 		}
 	}
@@ -697,7 +701,12 @@ func openLastModifiedFileIfPresent(configuration config.Configuration) {
 		say.Debug("Could not find last modified file in commit message")
 		return
 	}
+	validPath := regexp.MustCompile(`^[a-zA-Z0-9_\-\./ :\\]+$`)
 	lastModifiedFilePath := gitRootDir() + "/" + lastModifiedFile
+	if !validPath.MatchString(lastModifiedFilePath) {
+		say.Warning("invalid file path")
+		return
+	}
 	commandname, args := openCommandFor(configuration, lastModifiedFilePath)
 	_, err := startCommand(commandname, args...)
 	if err != nil {
