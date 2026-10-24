@@ -56,7 +56,7 @@ jobs:
           path: ./aur/${{ env.PACKAGE_NAME }}/PKGBUILD
 
       - name: Publish AUR package
-        uses: KSXGitHub/github-actions-deploy-aur@v2.2.5
+        uses: KSXGitHub/github-actions-deploy-aur@695685e2a5118b5ecfc54630efde443ce58bc173 # v2.2.5
         with:
           pkgname: ${{ env.PACKAGE_NAME }}
           pkgver: ${{ env.PKGVER }}
